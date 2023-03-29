@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:my_library/screens/library_screen.dart';
 import 'package:my_library/screens/scanner_screen.dart';
@@ -72,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.hasData && snapshot.data != null) {
             final List<Widget> screens = [
               LibraryScreen(db: snapshot.data!),
-              const ScannerScreen(),
+              ScannerScreen(onScanned: () => _onItemTapped(0)),
               const SettingsScreen(),
             ];
             return screens[_selectedIndex];

@@ -12,7 +12,6 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
-
   Future<List<Map<String, Object?>>> _getDbBook() async {
     return await widget.db.query("book");
   }
@@ -24,14 +23,18 @@ class _LibraryScreenState extends State<LibraryScreen> {
       builder: (BuildContext buildContext,
           AsyncSnapshot<List<Map<String, Object?>>> snapshot) {
         if (snapshot.hasData) {
-          List<Book> books = snapshot.data?.map((e) => Book(title: e['title'] as String, nbPages: e['nb_pages'] as int, cover: e['cover'] as String?)).toList()??[];
+          List<Book> books = snapshot.data
+                  ?.map((book) => Book(
+                      title: book['title'] as String,
+                      nbPages: book['nb_pages'] as int,
+                      cover: book['cover'] as String?))
+                  .toList() ??
+              [];
           return GridView.builder(
             itemCount: snapshot.data?.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, childAspectRatio: 0.75),
-            itemBuilder: (_, int index) {
-              return GridBookElement(book: books[index]);
-            },
+            itemBuilder: (_, int index) => GridBookElement(book: books[index]),
           );
         }
         if (snapshot.hasError) {

@@ -24,27 +24,28 @@ class _LibraryScreenState extends State<LibraryScreen> {
           AsyncSnapshot<List<Map<String, Object?>>> snapshot) {
         if (snapshot.hasData) {
           List<Book> books = snapshot.data
-                  ?.map((book) => Book(
-                      title: book['title'] as String,
-                      nbPages: book['nb_pages'] as int,
-                      cover: book['cover'] as String?))
+                  ?.map(
+                    (book) => Book(
+                        title: book['title'] as String,
+                        isbn: book['isbn'] as String,
+                        nbPages: book['nb_pages'] as int,
+                        cover: book['cover'] as String?),
+                  )
                   .toList() ??
               [];
           return GridView.builder(
-            itemCount: snapshot.data?.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 0.75),
-            itemBuilder: (_, int index) => GridBookElement(book: books[index]),
-          );
+              itemCount: snapshot.data?.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 0.75),
+              itemBuilder: (_, int index) =>
+                  GridBookElement(book: books[index], db: widget.db));
         }
         if (snapshot.hasError) {
           return Center(
-            child: Column(
-              children: [
-                const Icon(Icons.error_outline, color: Colors.red, size: 60),
-                Text(snapshot.error.toString())
-              ],
-            ),
+            child: Column(children: [
+              const Icon(Icons.error_outline, color: Colors.red, size: 60),
+              Text(snapshot.error.toString())
+            ]),
           );
         }
         return const Center(

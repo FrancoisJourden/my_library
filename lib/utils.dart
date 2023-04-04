@@ -21,6 +21,9 @@ class DbUtils{
             'cover': book.cover
           });
   }
+  static deleteBook(Database db, String isbn) async {
+    await db.delete('book', where: 'isbn=$isbn');
+  }
 
   static Future<bool> existsInLibrary(Database db, String isbn) async {
       return (await db.query('book', where: 'isbn = $isbn')).isNotEmpty;

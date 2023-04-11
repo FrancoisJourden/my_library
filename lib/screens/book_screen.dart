@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:my_library/models/book.dart';
 import 'package:my_library/utils.dart';
+
 import 'package:sqflite/sqflite.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BookScreen extends StatelessWidget {
   const BookScreen({Key? key}) : super(key: key);
@@ -26,9 +30,8 @@ class BookScreen extends StatelessWidget {
                       HttpUtils.getBookCoverLocation(book.cover ?? ""),
                       loadingBuilder:
                           (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
+                        if (loadingProgress == null) return child;
+
                         return Center(
                           child: CircularProgressIndicator(
                             value: loadingProgress.expectedTotalBytes != null
@@ -44,24 +47,26 @@ class BookScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 16),
                     child: Text(book.title, textAlign: TextAlign.justify)),
                 Padding(
-                    padding: const EdgeInsets.only(top: 16), child: Text('${book.nbPages} pages')),
+                    padding: const EdgeInsets.only(top: 16),
+                    child:
+                        Text('${book.nbPages} ${AppLocalizations.of(context)?.pages ?? "pages"}')),
                 FutureBuilder(
                     future: _isBookInLibrary(db, book),
                     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data!) {
-                          return Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: TextButton(
-                                  onPressed: () => _deleteFromLibrary(db, book, context),
-                                  child: const Text("Supprimer de ma bibliothèque")));
-                        }
                         return Padding(
                             padding: const EdgeInsets.only(top: 16),
-                            child: TextButton(
-                                onPressed: () => _addToLibrary(db, book, context),
-                                child: const Text("Ajouter à ma bibliothèque")));
+                            child: snapshot.data!
+                                ? TextButton(
+                                    onPressed: () => _deleteFromLibrary(db, book, context),
+                                    child: Text(AppLocalizations.of(context)?.delete_library ??
+                                        "Delete from my library"))
+                                : TextButton(
+                                    onPressed: () => _addToLibrary(db, book, context),
+                                    child: Text(AppLocalizations.of(context)?.add_library ??
+                                        "Add to my library")));
                       }
+
                       if (snapshot.hasError) {
                         return const SizedBox.shrink();
                       }

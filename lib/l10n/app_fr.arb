@@ -1,0 +1,9 @@
+{
+  "home": "Menu",
+  "scanner": "Scanneur",
+  "settings": "Paramètres",
+
+  "pages": "pages",
+  "add_library": "Ajouter à ma bibliothèque",
+  "delete_library": "Supprimer de ma bibliothèque"
+}

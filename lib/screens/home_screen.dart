@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:my_library/screens/library_screen.dart';
 import 'package:my_library/screens/scanner_screen.dart';
 import 'package:my_library/screens/settings_screen.dart';
+
 import 'package:path/path.dart';
 
 import 'package:sqflite/sqflite.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,14 +20,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final List<BottomNavigationBarItem> navBarItems = [
-    const BottomNavigationBarItem(label: "Home", icon: Icon(Icons.home)),
-    const BottomNavigationBarItem(
-        label: "Scanner", icon: Icon(Icons.barcode_reader)),
-    const BottomNavigationBarItem(
-        label: "settings", icon: Icon(Icons.settings)),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -33,8 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Database> _loadDB() async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'my_library_db');
-    Database db = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
+    Database db = await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
       await db.execute(
           "create table book (isbn TEXT PRIMARY KEY, title TEXT, nb_pages INTEGER, cover TEXT);");
     });
@@ -43,6 +38,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /* navbar Items */
+    final List<BottomNavigationBarItem> navBarItems = [
+      BottomNavigationBarItem(
+          label: AppLocalizations.of(context)?.home, icon: const Icon(Icons.home)),
+      BottomNavigationBarItem(
+          label: AppLocalizations.of(context)?.scanner, icon: const Icon(Icons.barcode_reader)),
+      BottomNavigationBarItem(
+          label: AppLocalizations.of(context)?.settings, icon: const Icon(Icons.settings)),
+    ];
+
     return Scaffold(
       appBar: AppBar(title: const Text("My library")),
       body: FutureBuilder(
@@ -51,8 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.hasData && snapshot.data != null) {
             final List<Widget> screens = [
               LibraryScreen(db: snapshot.data!),
-              ScannerScreen(
-                  onScanned: () => _onItemTapped(0), db: snapshot.data!),
+              ScannerScreen(onScanned: () => _onItemTapped(0), db: snapshot.data!),
               const SettingsScreen(),
             ];
             return screens[_selectedIndex];
@@ -66,14 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           return const Center(
-              child: SizedBox(
-                  width: 60, height: 60, child: CircularProgressIndicator()));
+              child: SizedBox(width: 60, height: 60, child: CircularProgressIndicator()));
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          items: navBarItems,
-          onTap: _onItemTapped),
+          currentIndex: _selectedIndex, items: navBarItems, onTap: _onItemTapped),
     );
   }
 }

@@ -28,10 +28,13 @@ class BookScreen extends StatelessWidget {
                 if (book.cover != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Image.network(
-                      HttpUtils.getBookCoverLocation(book.cover ?? ""),
-                      errorBuilder: (context, object, stacktrace) => ImageUtils.errorBuilder(context),
-                      loadingBuilder: ImageUtils.loadingBuilder,
+                    child: Hero(
+                      tag: "book_cover_${book.isbn}",
+                      child: Image.network(
+                        HttpUtils.getBookCoverLocation(book.cover ?? ""),
+                        errorBuilder: (context, object, stacktrace) => ImageUtils.errorBuilder(context),
+                        loadingBuilder: ImageUtils.loadingBuilder,
+                      ),
                     ),
                   ),
                 Padding(

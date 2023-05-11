@@ -22,10 +22,13 @@ class GridBookElement extends StatelessWidget {
               child: Column(children: [
                 if (book.cover != null)
                   Expanded(
-                    child: Image.network(
-                      HttpUtils.getBookCoverLocation(book.cover ?? ""),
-                      errorBuilder: (context, object, stacktrace) => ImageUtils.errorBuilder(context),
-                      loadingBuilder: ImageUtils.loadingBuilder,
+                    child: Hero(
+                      tag: "book_cover_${book.isbn}",
+                      child: Image.network(
+                        HttpUtils.getBookCoverLocation(book.cover ?? ""),
+                        errorBuilder: (context, object, stacktrace) => ImageUtils.errorBuilder(context),
+                        loadingBuilder: ImageUtils.loadingBuilder,
+                      ),
                     ),
                   ),
                 Padding(

@@ -48,33 +48,54 @@ class _HomeScreenState extends State<HomeScreen> {
           label: AppLocalizations.of(context)?.settings, icon: const Icon(Icons.settings)),
     ];
 
-    return Scaffold(
-      appBar: AppBar(title: const Text("My library")),
-      body: FutureBuilder(
-        future: _loadDB(),
-        builder: (BuildContext context, AsyncSnapshot<Database> snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            final List<Widget> screens = [
-              LibraryScreen(db: snapshot.data!),
-              ScannerScreen(onScanned: () => _onItemTapped(0), db: snapshot.data!),
-              const SettingsScreen(),
-            ];
-            return screens[_selectedIndex];
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Column(children: [
-                const Icon(Icons.error_outline, color: Colors.red, size: 60),
-                Text(snapshot.error.toString())
-              ]),
-            );
-          }
-          return const Center(
-              child: SizedBox(width: 60, height: 60, child: CircularProgressIndicator()));
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex, items: navBarItems, onTap: _onItemTapped),
+    return FutureBuilder(
+      future: _loadDB(),
+      builder: (BuildContext context, AsyncSnapshot<Database> snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          final List<Widget> screens = [
+            LibraryScreen(db: snapshot.data!),
+            ScannerScreen(onScanned: () => _onItemTapped(0), db: snapshot.data!),
+            const SettingsScreen(),
+          ];
+
+          return Scaffold(
+            appBar: getAppBar(context, snapshot.data!),
+            body: screens[_selectedIndex],
+            bottomNavigationBar: BottomNavigationBar(
+                currentIndex: _selectedIndex, items: navBarItems, onTap: _onItemTapped),
+          );
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Column(children: [
+              const Icon(Icons.error_outline, color: Colors.red, size: 60),
+              Text(snapshot.error.toString())
+            ]),
+          );
+        }
+        return const Center(
+            child: SizedBox(width: 60, height: 60, child: CircularProgressIndicator()));
+      },
     );
+  }
+
+  PreferredSizeWidget? getAppBar(BuildContext context, Database db) {
+    switch (_selectedIndex) {
+      case 1:
+        return null;
+      case 2:
+        return AppBar(title: Text(AppLocalizations.of(context)?.app_name ?? "My Library"));
+      default:
+        return AppBar(
+          title: Text(AppLocalizations.of(context)?.app_name ?? "My Library"),
+          actions: [
+            IconButton(onPressed: () => onSearchClick(context, db), icon: const Icon(Icons.search)),
+          ],
+        );
+    }
+  }
+
+  void onSearchClick(BuildContext context, Database db) {
+    Navigator.pushNamed(context, '/search', arguments: {'db': db});
   }
 }

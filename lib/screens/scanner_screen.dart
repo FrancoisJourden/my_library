@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'package:my_library/models/book.dart';
-import 'package:my_library/utils.dart';
+import 'package:my_library/utils/http_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ScannerScreen extends StatefulWidget {
@@ -71,7 +71,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       );
 
       if (context.mounted) {
-        Navigator.pushNamed(context, '/book_screen', arguments: {'book': book, 'db': widget.db});
+        Navigator.pushNamed(context, '/book', arguments: {'book': book, 'db': widget.db});
         widget.onScanned();
       }
     } catch (error) {

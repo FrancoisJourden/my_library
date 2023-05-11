@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:my_library/models/book.dart';
-import 'package:my_library/utils.dart';
+import 'package:my_library/utils/db_utils.dart';
+import 'package:my_library/utils/http_utils.dart';
+import 'package:my_library/utils/image_utils.dart';
 
 import 'package:sqflite/sqflite.dart';
 
@@ -28,19 +30,8 @@ class BookScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Image.network(
                       HttpUtils.getBookCoverLocation(book.cover ?? ""),
-                      loadingBuilder:
-                          (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
+                      errorBuilder: (context, object, stacktrace) => ImageUtils.errorBuilder(context),
+                      loadingBuilder: ImageUtils.loadingBuilder,
                     ),
                   ),
                 Padding(

@@ -1,9 +1,15 @@
 {
+  "app_name": "My Library",
+
+  "image_loading_error" : "Error loading image",
+
   "home": "Home",
   "scanner": "Scanner",
   "settings": "Settings",
 
   "pages": "pages",
   "add_library": "Add to my library",
-  "delete_library": "Delete from my library"
+  "delete_library": "Delete from my library",
+
+  "search_library": "Search in your library"
 }

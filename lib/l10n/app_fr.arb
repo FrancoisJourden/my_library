@@ -1,9 +1,15 @@
 {
+  "app_name": "Ma Bibliothèque",
+
+  "image_loading_error" : "Erreur chargement image",
+
   "home": "Menu",
   "scanner": "Scanneur",
   "settings": "Paramètres",
 
   "pages": "pages",
   "add_library": "Ajouter à ma bibliothèque",
-  "delete_library": "Supprimer de ma bibliothèque"
+  "delete_library": "Supprimer de ma bibliothèque",
+
+  "search_library": "Rechercher dans votre bibliothèque"
 }

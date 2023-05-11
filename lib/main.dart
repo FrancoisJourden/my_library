@@ -4,6 +4,7 @@ import 'package:my_library/screens/book_screen.dart';
 import 'package:my_library/screens/home_screen.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_library/screens/search_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
-        '/book_screen': (context) => const BookScreen()
+        '/book': (context) => const BookScreen(),
+        '/search': (context) => const SearchBar()
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

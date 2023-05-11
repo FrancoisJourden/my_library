@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_library/models/book.dart';
-import 'package:my_library/utils.dart';
+import 'package:my_library/utils/http_utils.dart';
+import 'package:my_library/utils/image_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 class GridBookElement extends StatelessWidget {
@@ -20,7 +21,13 @@ class GridBookElement extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Column(children: [
                 if (book.cover != null)
-                  Expanded(child: Image.network(HttpUtils.getBookCoverLocation(book.cover ?? ""))),
+                  Expanded(
+                    child: Image.network(
+                      HttpUtils.getBookCoverLocation(book.cover ?? ""),
+                      errorBuilder: (context, object, stacktrace) => ImageUtils.errorBuilder(context),
+                      loadingBuilder: ImageUtils.loadingBuilder,
+                    ),
+                  ),
                 Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Text(book.title, textAlign: TextAlign.justify)),
@@ -35,6 +42,6 @@ class GridBookElement extends StatelessWidget {
   }
 
   void _onclick(BuildContext context) {
-    Navigator.pushNamed(context, '/book_screen', arguments: {'book': book, 'db': db});
+    Navigator.pushNamed(context, '/book', arguments: {'book': book, 'db': db});
   }
 }

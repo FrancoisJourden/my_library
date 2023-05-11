@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/book': (context) => const BookScreen(),
-        '/search': (context) => const SearchBar()
+        '/search': (context) => const SearchScreen()
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

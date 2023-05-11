@@ -5,8 +5,8 @@ import 'package:my_library/models/book.dart';
 import 'package:my_library/utils/db_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key}) : super(key: key);
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
